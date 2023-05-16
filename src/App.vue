@@ -103,6 +103,16 @@ p {
   background-color: white !important;
 }
 
+// Bootstrap tooltip
+.popover.b-popover {
+  margin-bottom: 6px;
+  .popover-body {
+    font-family: BubblerOne;
+    font-size: 24px;
+    padding: 5px 10px;
+  }
+}
+
 // Custom scrollbar
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);

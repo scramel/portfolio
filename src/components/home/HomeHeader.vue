@@ -5,7 +5,7 @@
           <HomeProgressBar v-for="(release, index) in selection" :key="index" :header="options.headers[index]" :title="release.title" :index="index" class="mx-5"/>
         </b-row>
       </section>
-      <HomeCarousel :releases="selection" :options="options" @pauseplay="pauseTimer($event)" @resumeplay="autoplay(options.currentRelease)"/>
+      <HomeCarousel :releases="selection" :options="options" @pauseplay="pauseTimer($event)" @resumeplay="autoplay(options.currentRelease)" @slide="slide($event)"/>
   </header>
 </template>
 
@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       selection: [],
+      progressBarFillTime: 500,
       autoplayDelay: 5250,
       autoplayTimeout: null,
       options: {
@@ -205,41 +206,42 @@ export default {
     }
   },
   methods: {
-    next() { // shows the next slide in the carousel
-      this.options.currentRelease += 1
+    progressbar(index) { // returns the html element of a given progress bar
+      return document.getElementById(index)
+    },
+    fillProgressbar(index, width, duration, easing='linear') { // fills or drains a progress bar
+      this.progressbar(index).children[0].animate(
+        { width: `${width}%` },
+        { duration, fill: 'forwards', easing }
+      )
+    },
+    slide(next=true) { // slides the carousel
+      this.fillProgressbar(this.options.currentRelease, next ? 100 : 0, this.progressBarFillTime)
+      this.options.currentRelease += next ? 1 : -1
       if (this.options.currentRelease == this.selection.length) this.options.currentRelease = 0
+      if (this.options.currentRelease == -1) this.options.currentRelease = this.selection.length - 1
     },
     loop() { // drains all the progress bars
       this.selection.forEach((el, index) => {
-        const progressbar = document.getElementById(index)
-        progressbar.children[0].animate(
-          { width: `0%` },
-          { duration: 500, fill: 'forwards', easing: 'ease-in-out' }
-        )
+      this.fillProgressbar(index, 0, this.progressBarFillTime, 'ease-in-out')
       })
     },
     startTimer(timeout=this.autoplayDelay) { // starts a timer before getting to next slide
       clearTimeout(this.autoplayTimeout)
       this.autoplayTimeout = setTimeout(() => {
-        this.next()
+        this.slide()
       }, timeout)
     },
     pauseTimer(index) { // stops the timer and drains the progress bar for the current slide
       clearTimeout(this.autoplayTimeout)
-      const progressbar = document.getElementById(index)
-      progressbar.children[0].animate(
-        { width: `0%` },
-        { duration: 500, fill: 'forwards' }
-      )
+      this.fillProgressbar(index, 0, this.progressBarFillTime)
     },
     autoplay(index) { // starts a timer and starts filling the current progress bar
-      const progressbar = document.getElementById(index)
+      const progressbar = this.progressbar(index)
       if (!progressbar) return setTimeout(() => this.autoplay(index), 1000);
       this.startTimer()
-      progressbar.children[0].animate(
-        { width: `100%` },
-        { duration: this.autoplayDelay, fill: 'forwards' }
-      )
+      this.fillProgressbar(index, 0, this.progressBarFillTime)
+      this.fillProgressbar(index, 100, this.autoplayDelay)
     }
   },
   watch: {

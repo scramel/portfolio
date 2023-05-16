@@ -1,5 +1,5 @@
 <template>
-  <section class="home-carousel" :style="{ transform: `translate(-${options.currentRelease * 100}vw, 0px)` }">
+  <section class="home-carousel" :style="{ transform: `translate(-${options.currentRelease * 100}vw, 0px)` }" @touchstart="swipestart($event)" @touchend="swipeend($event)">
     <div class="home-carousel-inner">
       <article v-for="(release, index) in releases" :key="index" class="home-carousel-slide">
         <!-- Header -->
@@ -28,13 +28,15 @@
                 <h2>{{ release.artist }}</h2>
                 <h3>{{ release.subtitle }}</h3>
                 <br>
-                <b-row class="home-carousel-info--links m-0" @mouseover="$emit('pauseplay', index)" @mouseleave="$emit('resumeplay')">
-                  <a :href="release.url" class="medium-hide" style="width: auto;">
-                    <button><h2>⠀Listen⠀</h2></button>
-                  </a>
-                  <a v-for="(platform, index) in release.platforms" :key="index" :href="platform.url" style="width: auto;">
-                    <img :src="require(`@/assets/logos/${platform.name}.webp`)" :alt="platform.name" class="home-carousel-info--icon" v-b-popover.hover.top="platform.name">
-                  </a>
+                <b-row class="home-carousel-info--links m-0">
+                  <b-row style="width: auto;" @mouseover="$emit('pauseplay', index)" @mouseleave="$emit('resumeplay')">
+                    <a :href="release.url" class="medium-hide" style="width: auto;">
+                      <button><h2>⠀Listen⠀</h2></button>
+                    </a>
+                    <a v-for="(platform, index) in release.platforms" :key="index" :href="platform.url" style="width: auto;">
+                      <img :src="require(`@/assets/logos/${platform.name}.webp`)" :alt="platform.name" class="home-carousel-info--icon" v-b-popover.hover.top="platform.name">
+                    </a>
+                  </b-row>
                 </b-row>
               </div>
             </b-col>
@@ -57,6 +59,29 @@ export default {
     options: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      touchstartX: null,
+      touchstartY: null,
+      touchendX: null,
+      touchendY: null
+    }
+  },
+  methods: {
+    swipestart(event) {
+      this.touchstartX = event.changedTouches[0].screenX;
+      this.touchstartY = event.changedTouches[0].screenY;
+    },
+    swipeend(event) {
+      this.touchendX = event.changedTouches[0].screenX;
+      this.touchendY = event.changedTouches[0].screenY;
+      this.handleswipe();
+    },
+    handleswipe() {
+      if (this.touchendX < this.touchstartX) { this.$emit('slide') }        // swiped left
+      if (this.touchendX > this.touchstartX) { this.$emit('slide', false) } // swiped right
     }
   },
   watch: {
