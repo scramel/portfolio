@@ -1,5 +1,5 @@
 # portfolio
-See here: https://scramel.github.io/portfolio
+See here: https://scramel.github.io/works
 
 ## Project setup
 ``` 
