@@ -9,6 +9,11 @@
 // @ is an alias to /src
 import NavBar from '@/components/NavBar.vue'
 
+// .sample() custom function
+Array.prototype.sample = function(){
+  return this[Math.floor(Math.random()*this.length)];
+}
+
 export default {
   components: {
     NavBar
@@ -25,7 +30,6 @@ export default {
   font-family: BubblerOne;
   src: url('@/assets/fonts/BubblerOne-Regular.ttf')
 }
-
 
 #app {
   font-family: BubblerOne;
@@ -81,17 +85,31 @@ p {
     display: inline-block;
   }
 }
-.small-hide {
-  @media only screen and (max-width: 699px) { // Small only
-    display: none !important;
-  }
-}
-.medium-hide {
-  @media only screen and (max-width: 1199px) { // Small only
-    display: none !important;
-  }
-}
 
+// hide / show
+.sm-show {
+  @media only screen and (max-width: 699px) {
+    display: none !important;
+  }
+}
+.sm-hide {
+  display: none !important;
+  @media only screen and (max-width: 699px) {
+    display: flex;
+  }
+}
+.md-show {
+  @media only screen and (max-width: 1199px) {
+    display: none !important;
+  }
+}
+.md-hide {
+  display: none !important;
+  pointer-events: none;
+  @media only screen and (max-width: 1199px) {
+    display: flex !important;
+  }
+}
 
 // Bootstrap progress bar
 .progress {
@@ -125,5 +143,25 @@ p {
 }
 ::-webkit-scrollbar-thumb {
   background-color: white;
+}
+
+// Transitions!
+.typing-enter-active {
+  animation:
+  typing 1s steps(16, end),
+  typecursor .35s step-end infinite;
+}
+.typing-leave-active {
+  animation:
+  typing .5s steps(10, end) reverse,
+  typecursor .3s step-end infinite;
+}
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100%; }
+}
+@keyframes typecursor {
+  from, to { border-color: #fff; }
+  50% { border-color: transparent; }
 }
 </style>

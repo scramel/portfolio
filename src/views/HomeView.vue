@@ -1,26 +1,20 @@
 <template>
-  <main class="home scrollbar">
-    <HomeHeader id="header"/>
-    <!-- <HomeAbout id="about"/> -->
+  <main class="home">
+    <Header/>
   </main>
 </template>
 
 <script>
-import HomeHeader from '@/components/home/HomeHeader.vue'
-// import HomeAbout from '@/components/home/HomeAbout.vue'
+import Header from '@/components/home.v2/Header.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    HomeHeader
-    // HomeAbout
+    Header
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.home, header {
-  height: 100%;
-}
 </style>

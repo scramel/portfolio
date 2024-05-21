@@ -1,8 +1,8 @@
 <template>
   <nav class="navbar">
     <b-row class="mx-5" style="width: 100%;">
-      <b-row class="p-0 medium-hide">
-        <img class="navbar-logo" :src="require('@/assets/logos/scramel.webp')" alt="Logo" @click="scrollTo()">
+      <b-row class="p-0 md-show">
+        <img class="navbar-logo" :src="require('@/assets/logos/scramel.webp')" alt="Scramel logo." @click="scrollTo()">
         <p>music production<br>& web development</p>
       </b-row>
     </b-row>
