@@ -48,6 +48,7 @@ export default {
       bar = bar.children[0] // bar fill element
       if (this.mobile) {
         this.show = true
+        this.fill(bar, "0", 0, 'linear')
         this.fill(bar, "100", this.fillTime, 'linear')
         this.timer = setTimeout(() => {
           this.show = false

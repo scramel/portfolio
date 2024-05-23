@@ -59,7 +59,7 @@ export default {
       height: 100vh;
       width: 100vw;
       object-fit: cover;
-      filter: brightness(.5);
+      filter: brightness(.6);
     }
   }
   &-gradient {
